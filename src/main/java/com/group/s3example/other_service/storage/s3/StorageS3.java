@@ -5,11 +5,11 @@ import com.group.s3example.other_service.storage.StorageResource;
 import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
-import software.amazon.awssdk.services.s3.model.Bucket;
-import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -29,14 +29,15 @@ public class StorageS3 implements StorageResource {
 
     private S3Client createS3() {
         S3Client s3Client = S3Client.builder()
-                .endpointOverride(URI.create("https://vcos.cloudstorage.com.vn"))
+                .endpointOverride(URI.create(s3StorageConfig.getEndpoint()))
                 .region(Region.of(s3StorageConfig.getRegion().toLowerCase()))
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(s3StorageConfig.getAccessKey(), s3StorageConfig.getSecretKey())))
                 .serviceConfiguration(S3Configuration.builder()
                         .pathStyleAccessEnabled(true)
                         .build())
                 .build();
-        log.info("S3 Storage connected!");
+
+        log.warn("S3 Storage connected!");
         return s3Client;
     }
 
@@ -53,7 +54,6 @@ public class StorageS3 implements StorageResource {
     @Override
     public String writeResource(InputStream inputStream, String path) {
         S3Client s3Client = createS3();
-
 
 //        ListBucketsResponse list = s3Client.listBuckets();
 //        for (Bucket b : list.buckets()) {
@@ -73,5 +73,55 @@ public class StorageS3 implements StorageResource {
     @Override
     public String getUrl(String file) {
         return null;
+    }
+
+    @Override
+    public String createBucket(String bucketName) {
+        S3Client s3Client = createS3();
+
+        try {
+            ListObjectsV2Request listReq = ListObjectsV2Request.builder()
+                    .bucket("portal")
+                    .maxKeys(10)
+                    .build();
+
+            s3Client.listObjectsV2(listReq).contents().forEach((S3Object obj) -> {
+                System.out.println("- " + obj.key());
+            });
+        } catch (Exception e) {
+            System.err.println("Không thể list object trong bucket 'portal': " + e.getMessage());
+        }
+
+//        ListBucketsResponse buckets = s3Client.listBuckets();
+//        for (Bucket b : buckets.buckets()) {
+//            System.out.println("🔎 Bucket: " + b.name());
+//        }
+
+//        CreateBucketRequest request = CreateBucketRequest.builder()
+//                .bucket(bucketName)
+//                .build();
+//
+//        s3Client.createBucket(request);
+//        System.err.println("✅ Bucket created: " + bucketName);
+        return "";
+    }
+
+    public void uploadTestFile() {
+        S3Client s3Client = createS3();
+        String bucketName = "portal"; // bucket mặc định từ file XML
+        String objectKey = "test-folder/hello.txt";
+
+        // Nội dung file
+        String fileContent = "Xin chào từ Viettel Cloud!";
+
+        PutObjectRequest putRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(objectKey)
+                .contentType("text/plain")
+                .build();
+
+        s3Client.putObject(putRequest, RequestBody.fromString(fileContent));
+
+        System.out.println("✅ Đã upload object thành công: " + objectKey);
     }
 }

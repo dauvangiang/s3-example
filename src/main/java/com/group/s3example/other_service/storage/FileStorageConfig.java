@@ -33,7 +33,8 @@ public class FileStorageConfig {
                 String secretKey = environment.getProperty("s3.secret.key");
                 String bucket = environment.getProperty("s3.bucket");
                 String region = environment.getProperty("s3.region");
-                return new StorageS3(new StorageS3Config(accessKey, secretKey, bucket, region));
+                String endpoint = environment.getProperty("s3.endpoint");
+                return new StorageS3(new StorageS3Config(accessKey, secretKey, bucket, region, endpoint));
             }
             case STORAGE_AZURE, STORAGE_GCP -> throw new UnsupportedOperationException("Not implement this storage");
 //            case STORAGE_FTP -> {

@@ -11,6 +11,7 @@ public class StorageS3Config implements StorageConfig {
     private String secretKey;
     private String bucket;
     private String region;
+    private String endpoint;
 
     @Override
     public String toString() {

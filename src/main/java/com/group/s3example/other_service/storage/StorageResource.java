@@ -10,4 +10,8 @@ public interface StorageResource {
     boolean deleteFile(String file);
 
     String getUrl(String file);
+
+    String createBucket(String bucketName);
+
+    void uploadTestFile();
 }
