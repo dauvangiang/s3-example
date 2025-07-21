@@ -13,18 +13,8 @@ class S3ExampleApplicationTests {
 
     @Test
     void testCreateBucket() {
-        String bucketName = "first-bucket";
+        String bucketName = "bucket-portal441";
         fileStorageService.createBucket(bucketName);
-    }
-
-    @Test
-    void contextLoads() {
-        fileStorageService.uploadTestFile();
-    }
-
-    @Test
-    void test() {
-        fileStorageService.helloS3();
     }
 
 }
