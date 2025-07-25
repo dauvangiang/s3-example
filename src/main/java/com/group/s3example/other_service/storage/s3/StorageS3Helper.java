@@ -15,14 +15,15 @@ import java.util.Map;
 
 @Log4j2
 public class StorageS3Helper {
-    public String createBucket(S3Client s3Client, String bucketName) {
+    public String createBucket(S3Client s3Client, String bucket) {
         CreateBucketRequest createRequest = CreateBucketRequest.builder()
-                .bucket(bucketName)
+                .bucket(bucket)
                 .build();
         try {
             s3Client.createBucket(createRequest);
-            return bucketName;
+            return bucket;
         } catch (Exception e) {
+            e.printStackTrace();
             log.error(e);
             return null;
         }

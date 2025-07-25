@@ -1,6 +1,6 @@
 package com.group.s3example.controller;
 
-import com.group.s3example.services.file_storage.FileStorageService;
+import com.group.s3example.services.storage.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

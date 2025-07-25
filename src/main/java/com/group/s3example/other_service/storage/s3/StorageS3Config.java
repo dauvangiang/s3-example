@@ -12,14 +12,4 @@ public class StorageS3Config implements StorageConfig {
     private String bucket;
     private String region;
     private String endpoint;
-
-    @Override
-    public String toString() {
-        return "ECS3StorageConfig{" +
-                "accessKey='" + accessKey + '\'' +
-                ", secretKey='" + secretKey + '\'' +
-                ", bucket='" + bucket + '\'' +
-                ", region='" + region + '\'' +
-                '}';
-    }
 }

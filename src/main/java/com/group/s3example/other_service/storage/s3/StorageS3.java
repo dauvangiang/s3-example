@@ -7,32 +7,31 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
 
 import java.io.InputStream;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
 @Log4j2
 public class StorageS3 implements StorageResource {
-
     private final StorageS3Config s3StorageConfig;
-
     private final StorageS3Helper s3StorageService;
 
     public StorageS3(StorageConfig s3StorageConfig) {
-        log.info("configure: {}", s3StorageConfig);
         this.s3StorageConfig = (StorageS3Config) s3StorageConfig;
         this.s3StorageService = new StorageS3Helper();
     }
 
     private S3Client createS3() {
         S3Client s3Client = S3Client.builder()
-//                .endpointOverride(URI.create(s3StorageConfig.getEndpoint()))
+                .endpointOverride(URI.create(s3StorageConfig.getEndpoint()))
                 .region(Region.of(s3StorageConfig.getRegion().toLowerCase()))
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(s3StorageConfig.getAccessKey(), s3StorageConfig.getSecretKey())))
-//                .serviceConfiguration(S3Configuration.builder()
-//                        .pathStyleAccessEnabled(true)
-//                        .build())
+                .serviceConfiguration(S3Configuration.builder()
+                        .pathStyleAccessEnabled(true)
+                        .build())
                 .build();
 
         log.info("S3 Storage connected!");
