@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: springboot-app
+    env: docker
+    plan: free   # có thể đổi sang starter/standard nếu cần
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: JAVA_OPTS
+        value: "-Xms256m -Xmx512m"
