@@ -13,5 +13,5 @@ public class UploadRes {
     private String documentGroup;
     @JsonProperty("document_id")
     private String documentId;
-    private String url;
+    private String path;
 }
