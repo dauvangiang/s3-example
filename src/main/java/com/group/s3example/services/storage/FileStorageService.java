@@ -29,7 +29,7 @@ public class FileStorageService {
             String path = String.format("%s/%s/%s.%s", docGroup, docId, System.currentTimeMillis(), extend);
             storageResource.writeFile(inputStream, file.getSize(), path);
             return new BaseResponse<>(
-                    new UploadRes(docGroup, docId, path)
+                    new UploadRes(docGroup, docId, "/" + path)
             );
         } catch (IOException e) {
             e.printStackTrace();
